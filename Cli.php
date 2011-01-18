@@ -44,7 +44,8 @@ class Cli
     			var_dump($this->_pheanstalk->statsTube($this->_tube));
     			break;
     		case "tubes":
-    			var_dump($this->_pheanstalk->listTubes());		
+    			var_dump($this->_pheanstalk->listTubes());
+    			break;		
     		case "drop-pending":
     			$numToDrop = $this->_argv[4] ? $this->_argv[4] : 1;
     			$this->_pheanstalk->watch($this->_tube);
