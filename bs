@@ -1,31 +1,5 @@
 #!/usr/local/zend/bin/php
-<?
-	require_once 'Pheanstalk/pheanstalk_init.php';
-        $ps = new Pheanstalk(localhost);
-	$ps->useTube($argv[1]);
-	switch ($argv[2]) {
-		case "kick":
-			$num = $argv[3] ? $argv[3] : 1; 
-			var_dump($ps->kick($num));
-			break;
-		case "peek-buried":
-			var_dump($ps->peekBuried());
-			break;
-		case "delete":
-			$jobId = $argv[3];
-			if ($jobId) {
-				$job = new Pheanstalk_Job($jobId, null);
-				$ps->delete($job);
-			}
-			break;
-		case "stats":
-			var_dump($ps->statsTube($argv[1]));
-			break;
-		case "tubes":
-			var_dump($ps->listTubes());		
-		case "drop-pending":
-			
-			break;
-	}
-
-?>
+<?php
+require_once 'cli.php';
+$cli = new Cli($argv);
+$cli->dispatch();
