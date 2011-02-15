@@ -1,5 +1,5 @@
 #!/usr/local/zend/bin/php
 <?php
-require_once 'cli.php';
+require_once 'Cli.php';
 $cli = new Cli($argv);
 $cli->dispatch();

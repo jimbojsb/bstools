@@ -50,7 +50,7 @@ class Cli
     			$numToDrop = $this->_argv[4] ? $this->_argv[4] : 1;
     			$this->_pheanstalk->watch($this->_tube);
     			for ($c = 0; $c < $numToDrop; $c++) {
-    			    $job = $this->_pheanstalk->reserve();
+    			    $job = $this->_pheanstalk->peekReady();
     			    $this->_pheanstalk->delete($job);
     			}
     			break;
