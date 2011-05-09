@@ -20,6 +20,38 @@ class Cli
         }    
     }
     
+    public function stats()
+    {
+        return $this->_pheanstalk->statsTube($this->_tube);
+    }
+
+    /**
+     * Delete all jobs from the ready or buried queue of the current tube.
+     *
+     * @param string $queue "ready" or "buried"
+     **/
+    public function drain($queue)
+    {
+        if(!in_array($queue, array('ready', 'buried'))) {
+            throw new Exception("Queue param must be 'ready' or 'buried'");
+        }
+        $stats = $this->stats();
+        $numToDrop = $stats["current-jobs-$queue"];
+
+        $this->_pheanstalk->watch($this->_tube);
+        for ($c = 0; $c < $numToDrop; $c++) {
+            switch($queue) {
+                case 'ready':
+                    $job = $this->_pheanstalk->peekReady();
+                    break;
+                case 'buried':
+                    $job = $this->_pheanstalk->peekBuried();
+                    break;
+            }
+            $this->_pheanstalk->delete($job);
+        }
+    }
+
     public function dispatch()
     {
     	switch ($this->_action) {
@@ -41,18 +73,16 @@ class Cli
     			}
     			break;
     		case "stats":
-    			var_dump($this->_pheanstalk->statsTube($this->_tube));
+    			var_dump($this->stats());
     			break;
     		case "tubes":
     			var_dump($this->_pheanstalk->listTubes());
     			break;		
-    		case "drop-pending":
-    			$numToDrop = $this->_argv[4] ? $this->_argv[4] : 1;
-    			$this->_pheanstalk->watch($this->_tube);
-    			for ($c = 0; $c < $numToDrop; $c++) {
-    			    $job = $this->_pheanstalk->peekReady();
-    			    $this->_pheanstalk->delete($job);
-    			}
+    		case "drain-ready":
+                $this->drain('ready');
+    			break;
+    		case "drain-buried":
+                $this->drain('buried');
     			break;
     		case "insert-json":
                 $jobData = $this->_argv[4];
