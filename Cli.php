@@ -10,12 +10,12 @@ class Cli
     public function __construct($argv)
     {
         $this->_pheanstalk = new Pheanstalk($argv[1]);
-        $this->_tube = $argv[2];
-        $this->_pheanstalk->useTube($this->_tube);
         $this->_argv = $argv;
         if (count($argv) == 3) {
             $this->_action = $argv[2];
         } else {
+            $this->_tube = $argv[2];
+            $this->_pheanstalk->useTube($this->_tube);
             $this->_action = $argv[3];
         }    
     }
