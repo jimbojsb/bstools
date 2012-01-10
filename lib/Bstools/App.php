@@ -14,5 +14,9 @@ class App extends Application
         $this->add(new \Bstools\Command\Stats());
         $this->add(new \Bstools\Command\Kick());
         $this->add(new \Bstools\Command\Tubes());
+        $this->add(new \Bstools\Command\Delete());
+        $this->add(new \Bstools\Command\Insert());
+        $this->add(new \Bstools\Command\Drain());
+        $this->add(new \Bstools\Command\Peek());
     }
 }
