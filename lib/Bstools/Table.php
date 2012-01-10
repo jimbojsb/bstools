@@ -42,7 +42,7 @@ class Table
         $output .= "| ";
         $cols[] = str_repeat(' ', $columnWidths["rows"]);
         foreach ($columns as $col) {
-            $cols[] = str_pad($col, $columnWidths[$col], ' ');
+            $cols[] = '<info>' . str_pad($col, $columnWidths[$col], ' ') . '</info>';
         }
         $output .= implode(' | ', $cols);
         $output .= " |\n";
@@ -55,7 +55,13 @@ class Table
             $output .= " | ";
             $cols = array();
             foreach ($columns as $col) {
-                $cols[] = str_pad($data[$col], $columnWidths[$col], ' ');
+                $str = str_pad($data[$col], $columnWidths[$col], ' ');
+                if ($col == 'current-jobs-buried' && $data[$col] != 0) {
+                    $str = "<error>$str</error>";
+                } else if ($data[$col] != 0) {
+                    $str = "<comment>$str</comment>";
+                }
+                $cols[] = $str;
             }
             $output .= implode(" | ", $cols);
             $output .= " |\n";
