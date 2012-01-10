@@ -1,5 +1,0 @@
-#!/usr/bin/env php
-<?php
-require_once 'Cli.php';
-$cli = new Cli($argv);
-$cli->dispatch();

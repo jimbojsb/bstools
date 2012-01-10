@@ -52,6 +52,40 @@ class Cli
         }
     }
 
+    public function statsAll()
+    {
+        $tubes = $this->_pheanstalk->listTubes();
+        $stats = array();
+        foreach ($tubes as $tube) {
+            $stats[$tube] = (array) $this->_pheanstalk->statsTube($tube);
+            unset($stats[$tube]["name"]);
+        }
+        $statNames = array_keys($stats[$tubes[0]]);
+        $maxStatNameLength = 0;
+        foreach  ($statNames as $statName) {
+           if (strlen($statName) > $maxStatNameLength) {
+               $maxStatNameLength = strlen($statName);
+           }
+        }
+        $maxStatNameLength += 3;
+        echo str_repeat(" ", $maxStatNameLength);
+        echo "|  ";
+        echo implode("  |   ", $tubes) . PHP_EOL;
+        foreach ($statNames as $stat) {
+            $nameLength = strlen($stat . "  |");
+            $nameLengthDiff = $maxStatNameLength - $nameLength;
+            if ($nameLengthDiff <= 0) {
+                $nameLengthDiff = 0;
+            }
+            echo $stat . str_repeat(" ", $nameLengthDiff) .  "   |";
+            foreach ($tubes as $tube) {
+                echo "  " . $stats[$tube][$stat] . "  |  ";
+                echo @str_repeat(" ", strlen($tube) - strlen($stats[$tube][$stat]));
+            }
+            echo PHP_EOL;
+        }
+    }
+
     public function dispatch()
     {
     	switch ($this->_action) {
@@ -77,7 +111,10 @@ class Cli
     			break;
     		case "tubes":
     			var_dump($this->_pheanstalk->listTubes());
-    			break;		
+    			break;
+            case "stats-all":
+                $this->statsAll();
+                break;
     		case "drain-ready":
                 $this->drain('ready');
     			break;
@@ -93,6 +130,10 @@ class Cli
                 }
                 $job = json_encode($job);
                 $this->_pheanstalk->put($job);
+    		    break;
+			case "insert":
+                $jobData = $this->_argv[4];
+                $this->_pheanstalk->put($jobData);
     		    break;
 			
     	}
