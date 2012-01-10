@@ -13,5 +13,6 @@ class App extends Application
         parent::__construct('bsTools', '0.3');
         $this->add(new \Bstools\Command\Stats());
         $this->add(new \Bstools\Command\Kick());
+        $this->add(new \Bstools\Command\Tubes());
     }
 }
