@@ -2,6 +2,12 @@ bsTools
 =======
 bsTools allows you to work with a local (or remote) beanstalkd jobqueue. bsTools utilizes pheanstalk to talk to beanstalkd, and Symfony2\Console for the CLI interface.
 
+Requirements
+------------
+* PHP 5.3 or above (tested on 5.3.6)
+* MacOS or Linux (BASH)
+* If you have suhosin, you must set suhosin.executor.include.whitelist = phar
+
 
 Getting bsTools
 ---------------
