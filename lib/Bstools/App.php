@@ -10,7 +10,7 @@ class App extends Application
 {
     public function __construct()
     {
-        parent::__construct('bsTools', '0.3');
+        parent::__construct('bsTools', '0.4');
         $this->add(new \Bstools\Command\Stats());
         $this->add(new \Bstools\Command\Kick());
         $this->add(new \Bstools\Command\Tubes());
@@ -18,5 +18,6 @@ class App extends Application
         $this->add(new \Bstools\Command\Insert());
         $this->add(new \Bstools\Command\Drain());
         $this->add(new \Bstools\Command\Peek());
+        $this->add(new \Bstools\Command\Bury());
     }
 }
