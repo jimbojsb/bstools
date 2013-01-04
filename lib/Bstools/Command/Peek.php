@@ -14,7 +14,7 @@ class Peek extends Base
         $this->setName('peek')
              ->setDescription('Peek at the job on top of the ready or buried queue');
         $this->addArgument('tube', InputArgument::REQUIRED, 'the tube to drain from');
-        $this->addOption('buried', null, InputOption::VALUE_NONE, 'drain from buried instead of ready');
+        $this->addArgument('state', InputArgument::OPTIONAL, 'peek from buried instead of ready', 'ready');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
@@ -22,13 +22,14 @@ class Peek extends Base
         $pheanstalk = new \Pheanstalk($input->getOption('host'));
 
         $tube = $input->getArgument('tube');
-        $buried = $input->getOption('buried');
+        $state = $input->getArgument('state');
+        $permissibleStates = array('ready', 'buried', 'delayed');
+        if (!in_array($state, $permissibleStates)) {
+            throw new \Exception("$state is not a valid job state");
+        }
         try {
-            if ($buried) {
-                $job = $pheanstalk->peekBuried($tube);
-            } else {
-                $job = $pheanstalk->peekReady($tube);
-            }
+            $cmd = "peek" . ucfirst(strtolower($state));
+            $job = $pheanstalk->$cmd($tube);
         } catch (\Exception $e) {
             return;
         }

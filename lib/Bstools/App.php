@@ -19,5 +19,6 @@ class App extends Application
         $this->add(new \Bstools\Command\Drain());
         $this->add(new \Bstools\Command\Peek());
         $this->add(new \Bstools\Command\Bury());
+        $this->add(new \Bstools\Command\StatsJob());
     }
 }
