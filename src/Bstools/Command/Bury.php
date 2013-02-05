@@ -19,7 +19,7 @@ class Bury extends Base
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $pheanstalk = new \Pheanstalk($input->getOption('host'));
+        $pheanstalk = new \Pheanstalk_Pheanstalk_Pheanstalk($input->getOption('host'));
 
         $tube = $input->getArgument('tube');
         $num = $input->getArgument('num');

@@ -17,7 +17,7 @@ class Tubes extends Base
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $pheanstalk = new \Pheanstalk($input->getOption('host'));
+        $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'));
         $tubes = $pheanstalk->listTubes();
         $output->writeln("<info>Found " . count($tubes) . " tubes...</info>");
         foreach ($tubes as $tube) {

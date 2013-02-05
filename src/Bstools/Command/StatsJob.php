@@ -18,7 +18,7 @@ class StatsJob extends Base
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $pheanstalk = new \Pheanstalk($input->getOption('host'));
+        $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'));
 
         $jobId = $input->getArgument('job-id');
         $stats = $pheanstalk->statsJob($jobId);

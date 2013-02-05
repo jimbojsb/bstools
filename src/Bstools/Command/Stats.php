@@ -18,7 +18,7 @@ class Stats extends Base
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $pheanstalk = new \Pheanstalk($input->getOption('host'));
+        $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'));
 
         $tube = $input->getArgument('tube');
         if ($tube) {
