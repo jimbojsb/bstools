@@ -1,0 +1,17 @@
+{
+    "name": "jimbojsb/bstools",
+    "description": "beanstalkd tools",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Josh Butts",
+            "email": "josh@joshbutts.com",
+            "role": "developer"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Bstools": "src/"
+        }
+    }
+}
