@@ -9,18 +9,38 @@ use Symfony\Component\Console\Command\Command,
 
 class Stats extends Base
 {
+    private $refreshRate = 50000;
     public function configure()
     {
         $this->setName('stats')
              ->setDescription('Print stats on [tube] or on all tubes if [tube] is omitted');
         $this->addArgument('tube', InputArgument::OPTIONAL, 'the tube to show stats for');
+        $this->addOption('monitor', null, InputOption::VALUE_NONE, 'Monitor mode');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'));
-
         $tube = $input->getArgument('tube');
+        $monitor = $input->getOption('monitor');
+
+        while(1) {
+            if ( $monitor ) $this->clearScreen(); 
+            $outputTable = $this->calc($pheanstalk, $tube);
+            $output->write($outputTable->render(), false);
+
+            if ( $monitor ) usleep($this->refreshRate);
+            else break;
+        }
+    }
+
+    private function clearScreen() 
+    {
+        print chr(27) . "[2J" . chr(27) . "[;H";
+    }
+
+    private function calc(\Pheanstalk_Pheanstalk $pheanstalk, $tube = null)
+    {
         if ($tube) {
             $tubes[] = $tube;
         } else {
@@ -47,9 +67,6 @@ class Stats extends Base
             }
         }
 
-
-
-        $outputTable = new Table($stats);
-        $output->writeln($outputTable->render());
+        return new Table($stats);
     }
 }
