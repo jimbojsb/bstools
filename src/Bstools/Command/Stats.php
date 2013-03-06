@@ -9,15 +9,14 @@ use Symfony\Component\Console\Command\Command,
 
 class Stats extends Base
 {
-    private $refreshRate = 0.5;
 
     public function configure()
     {
         $this->setName('stats')
              ->setDescription('Print stats on [tube] or on all tubes if [tube] is omitted');
         $this->addArgument('tube', InputArgument::OPTIONAL, 'the tube to show stats for');
-        $this->addOption('monitor', null, InputOption::VALUE_NONE, 'Monitor mode');
-        $this->addOption('rate', null, InputOption::VALUE_OPTIONAL, 'Refresh rate', $this->refreshRate);
+        $this->addOption('monitor', 'm', InputOption::VALUE_NONE, 'monitor mode');
+        $this->addOption('refresh', 'r', InputOption::VALUE_OPTIONAL, 'monitor refresh rate in seconds', 1);
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
@@ -26,15 +25,15 @@ class Stats extends Base
         $tube = $input->getArgument('tube');
         $monitor = $input->getOption('monitor');
 
-        if ( !$rate = (float)$input->getOption('rate') ) $rate = $this->refreshRate;
-
-        while(1) {
-            if ( $monitor ) $this->clearScreen(); 
-            $outputTable = $this->calc($pheanstalk, $tube);
-            $output->write($outputTable->render(), false);
-
-            if ( $monitor ) usleep($rate * 1000000);
-            else break;
+        if ($monitor) {
+            $rate = $input->getOption('refresh');
+            while (true) {
+                $this->clearScreen();
+                $output->writeln($this->generateStatsTable($pheanstalk, $tube)->render());
+                sleep($rate);
+            }
+        } else {
+            $output->writeln($this->generateStatsTable($pheanstalk, $tube)->render());
         }
     }
 
@@ -43,7 +42,7 @@ class Stats extends Base
         print chr(27) . '[2J' . chr(27) . '[;H';
     }
 
-    private function calc(\Pheanstalk_Pheanstalk $pheanstalk, $tube = null)
+    private function generateStatsTable(\Pheanstalk_Pheanstalk $pheanstalk, $tube = null)
     {
         if ($tube) {
             $tubes[] = $tube;
@@ -53,7 +52,7 @@ class Stats extends Base
 
         $stats = array();
         foreach ($tubes as $tube) {
-            $stats[$tube] = (Array) $pheanstalk->statsTube($tube);
+            $stats[$tube] = (array) $pheanstalk->statsTube($tube);
         }
 
         $statsToDisplay = array('current-jobs-urgent',

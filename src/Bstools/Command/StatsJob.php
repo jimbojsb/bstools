@@ -22,7 +22,6 @@ class StatsJob extends Base
 
         $jobId = $input->getArgument('job-id');
         $stats = $pheanstalk->statsJob($jobId);
-        var_dump($stats);
         $output->writeln("<info>Job ID: </info> <comment>$jobId</comment>");
         foreach ($stats as $key => $val) {
             $output->writeln("<info>$key: </info><comment>$val</comment>");
