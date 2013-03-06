@@ -19,7 +19,7 @@
     ],
     "require": {
         "pda/pheanstalk": "dev-master",
-        "symfony/console": "v2.1.*"
+        "symfony/console": "2.1.*"
     },
     "config": {
         "vendor-dir": "lib/"
