@@ -36,7 +36,7 @@ class Drain extends Base
         }
 
         $output->writeln("<info>Attempting to drain $num jobs from $tube...</info>");
-        $drained = 0;
+        $drained = 0; $errors = 0;
         for ($c = 0; $c < $num; $c++) {
             try {
                 if ($buried) {
@@ -48,10 +48,16 @@ class Drain extends Base
                 break;
             }
             if ($job) {
-                $pheanstalk->delete($job);
-                $drained++;
+                try {
+                    $pheanstalk->delete($job);
+                    $drained++;
+                } catch (\Pheanstalk_Exception_ServerException $e) {
+                    $output->writeln("<error>" . $e->getMessage() . "</error>");
+                    $errors++;
+                }
+
             }
         }
-        $output->writeln("<info>Actually drained $drained</info>");
+        $output->writeln("<info>Actually drained $drained, errors $errors</info>");
     }
 }
