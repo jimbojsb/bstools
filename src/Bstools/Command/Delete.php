@@ -18,7 +18,7 @@ class Delete extends Base
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'));
+        $pheanstalk = $this->createConnection($input);
 
         $jobId = $input->getArgument('jobid');
         $job = new \Pheanstalk_Pheanstalk_Job($jobId, null);

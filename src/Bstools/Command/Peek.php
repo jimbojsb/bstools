@@ -19,7 +19,7 @@ class Peek extends Base
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'));
+        $pheanstalk = $this->createConnection($input);
 
         $tube = $input->getArgument('tube');
         $state = $input->getArgument('state');

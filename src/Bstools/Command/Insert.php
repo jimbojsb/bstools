@@ -28,7 +28,7 @@ class Insert extends Base
         $delay = $input->getOption('delay');
         $ttr = $input->getOption('ttr');
 
-        $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'));
+        $pheanstalk = $this->createConnection($input);
         $pheanstalk->putInTube($tube, $jobData, $priority, $delay, $ttr);
 
         $output->writeln("<info>Added job to $tube with priority $priority, delay $delay, TTR $ttr</info>");

@@ -12,4 +12,14 @@ class Base extends Command
         parent::__construct();
         $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'hostname of the beanstalk server', 'localhost');
     }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @return \Pheanstalk_Pheanstalk
+     */
+    protected function createConnection(InputInterface $input)
+    {
+        $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'));
+        return $pheanstalk;
+    }
 }
