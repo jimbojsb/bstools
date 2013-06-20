@@ -11,6 +11,7 @@ class Base extends Command
     {
         parent::__construct();
         $this->addOption('host', null, InputOption::VALUE_OPTIONAL, 'hostname of the beanstalk server', 'localhost');
+        $this->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'port of the beanstalk server', \Pheanstalk_PheanstalkInterface::DEFAULT_PORT);
     }
 
     /**
@@ -19,7 +20,7 @@ class Base extends Command
      */
     protected function createConnection(InputInterface $input)
     {
-        $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'));
+        $pheanstalk = new \Pheanstalk_Pheanstalk($input->getOption('host'), $input->getOption('port'));
         return $pheanstalk;
     }
 }
