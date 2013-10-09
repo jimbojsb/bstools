@@ -21,7 +21,7 @@ class Delete extends Base
         $pheanstalk = $this->createConnection($input);
 
         $jobId = $input->getArgument('jobid');
-        $job = new \Pheanstalk_Pheanstalk_Job($jobId, null);
+        $job = new \Pheanstalk_Job($jobId, null);
         $pheanstalk->delete($job);
         $output->writeln("<info>Deleted $jobId...</info>");
     }
