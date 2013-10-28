@@ -18,7 +18,7 @@
         "bin/bs"
     ],
     "require": {
-        "pda/pheanstalk": "dev-master",
+        "pda/pheanstalk": "2.1.0",
         "symfony/console": "~2.1"
     }
 }
