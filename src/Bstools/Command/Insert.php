@@ -1,11 +1,12 @@
 <?php
+
 namespace Bstools\Command;
-use Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Bstools\Table;
+
+use Pheanstalk\PheanstalkInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Insert extends Base
 {
@@ -15,9 +16,9 @@ class Insert extends Base
              ->setDescription('Insert a job into a given tube');
         $this->addArgument('tube', InputArgument::REQUIRED, 'the tube to insert the job into');
         $this->addArgument('jobdata', InputArgument::REQUIRED, 'plain text data for the job');
-        $this->addOption('priority', null, InputOption::VALUE_OPTIONAL, 'Priority for the job', \Pheanstalk_Pheanstalk::DEFAULT_PRIORITY);
-        $this->addOption('delay', null, InputOption::VALUE_OPTIONAL, 'Delay for the job', \Pheanstalk_Pheanstalk::DEFAULT_DELAY);
-        $this->addOption('ttr', null, InputOption::VALUE_OPTIONAL, 'TTR for the job', \Pheanstalk_Pheanstalk::DEFAULT_TTR);
+        $this->addOption('priority', null, InputOption::VALUE_OPTIONAL, 'Priority for the job', PheanstalkInterface::DEFAULT_PRIORITY);
+        $this->addOption('delay', null, InputOption::VALUE_OPTIONAL, 'Delay for the job', PheanstalkInterface::DEFAULT_DELAY);
+        $this->addOption('ttr', null, InputOption::VALUE_OPTIONAL, 'TTR for the job', PheanstalkInterface::DEFAULT_TTR);
     }
 
     public function execute(InputInterface $input, OutputInterface $output)

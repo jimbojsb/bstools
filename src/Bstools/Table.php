@@ -1,5 +1,7 @@
 <?php
+
 namespace Bstools;
+
 class Table
 {
     protected $data;
@@ -23,7 +25,6 @@ class Table
         sort($columns);
 
         $rows = array_keys($this->data);
-
 
         $columnWidths["rows"] = $this->getMaxLength($rows);
         foreach ($columns as $column) {

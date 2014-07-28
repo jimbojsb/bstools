@@ -1,11 +1,13 @@
 <?php
+
 namespace Bstools\Command;
-use Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Bstools\Table;
+
+use Pheanstalk\Pheanstalk;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Bstools\Table;
 
 class Stats extends Base
 {
@@ -42,7 +44,7 @@ class Stats extends Base
         print chr(27) . '[2J' . chr(27) . '[;H';
     }
 
-    private function generateStatsTable(\Pheanstalk_Pheanstalk $pheanstalk, $tube = null)
+    private function generateStatsTable(Pheanstalk $pheanstalk, $tube = null)
     {
         if ($tube) {
             $tubes[] = $tube;

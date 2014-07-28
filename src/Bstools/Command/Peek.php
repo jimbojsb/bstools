@@ -1,11 +1,10 @@
 <?php
+
 namespace Bstools\Command;
-use Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Bstools\Table;
+
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Peek extends Base
 {
@@ -29,6 +28,7 @@ class Peek extends Base
         }
         try {
             $cmd = "peek" . ucfirst(strtolower($state));
+            /** @var \Pheanstalk\Job $job */
             $job = $pheanstalk->$cmd($tube);
         } catch (\Exception $e) {
             return;

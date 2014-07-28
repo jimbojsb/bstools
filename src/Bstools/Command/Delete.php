@@ -1,11 +1,11 @@
 <?php
+
 namespace Bstools\Command;
-use Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Bstools\Table;
+
+use Pheanstalk\Job;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Delete extends Base
 {
@@ -21,7 +21,7 @@ class Delete extends Base
         $pheanstalk = $this->createConnection($input);
 
         $jobId = $input->getArgument('jobid');
-        $job = new \Pheanstalk_Job($jobId, null);
+        $job = new Job($jobId, null);
         $pheanstalk->delete($job);
         $output->writeln("<info>Deleted $jobId...</info>");
     }
