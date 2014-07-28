@@ -1,11 +1,12 @@
 <?php
+
 namespace Bstools\Command;
-use Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputArgument,
-    Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\InputInterface,
-    Symfony\Component\Console\Output\OutputInterface,
-    Bstools\Table;
+
+use Pheanstalk\Exception\ServerException;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Drain extends Base
 {
@@ -51,7 +52,7 @@ class Drain extends Base
                 try {
                     $pheanstalk->delete($job);
                     $drained++;
-                } catch (\Pheanstalk_Exception_ServerException $e) {
+                } catch (ServerException $e) {
                     $output->writeln("<error>" . $e->getMessage() . "</error>");
                     $errors++;
                 }
