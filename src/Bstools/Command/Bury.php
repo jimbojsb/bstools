@@ -12,8 +12,8 @@ class Bury extends Base
     {
         $this->setName('bury')
              ->setDescription('Bury existing jobs from ready state');
-        $this->addArgument('tube', InputArgument::REQUIRED, 'the tube to drain from');
-        $this->addArgument('num', InputArgument::OPTIONAL, 'number of jobs to drain');
+        $this->addArgument('tube', InputArgument::REQUIRED, 'the tube to bury from');
+        $this->addArgument('num', InputArgument::OPTIONAL, 'number of jobs to bury');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
@@ -39,6 +39,6 @@ class Bury extends Base
                 break;
             }
         }
-        $output->writeln("<info>Actually drained $buried</info>");
+        $output->writeln("<info>Actually buried $buried</info>");
     }
 }
