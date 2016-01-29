@@ -2,12 +2,13 @@
 
 namespace Bstools\Command;
 
+use Bstools\Renderer\Raw;
+use Bstools\Renderer\Table;
 use Pheanstalk\Pheanstalk;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Bstools\Table;
 
 class Stats extends Base
 {
@@ -19,6 +20,7 @@ class Stats extends Base
         $this->addArgument('tube', InputArgument::OPTIONAL, 'the tube to show stats for');
         $this->addOption('monitor', 'm', InputOption::VALUE_NONE, 'monitor mode');
         $this->addOption('refresh', 'r', InputOption::VALUE_OPTIONAL, 'monitor refresh rate in seconds', 1);
+        $this->addOption('renderer', 'e', InputOption::VALUE_OPTIONAL, 'select a renderer (`table` or `raw`)', 'table');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
@@ -27,19 +29,21 @@ class Stats extends Base
         $tube = $input->getArgument('tube');
         $monitor = $input->getOption('monitor');
 
+        $renderer = $this->getRenderer($input);
+
         if ($monitor) {
             $rate = $input->getOption('refresh');
             while (true) {
                 $this->clearScreen();
-                $output->writeln($this->generateStatsTable($pheanstalk, $tube)->render());
+                $output->writeln($renderer->render($this->generateStatsTable($pheanstalk, $tube)));;
                 sleep($rate);
             }
         } else {
-            $output->writeln($this->generateStatsTable($pheanstalk, $tube)->render());
+            $output->writeln($renderer->render($this->generateStatsTable($pheanstalk, $tube)));
         }
     }
 
-    private function clearScreen() 
+    private function clearScreen()
     {
         print chr(27) . '[2J' . chr(27) . '[;H';
     }
@@ -72,6 +76,21 @@ class Stats extends Base
             }
         }
 
-        return new Table($stats);
+        return $stats;
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     *
+     * @return \Bstools\Renderer\RendererInterface
+     */
+    private function getRenderer(InputInterface $input)
+    {
+        switch ($input->getOption('renderer')) {
+            case 'raw':
+                return new Raw();
+        }
+
+        return new Table();
     }
 }
