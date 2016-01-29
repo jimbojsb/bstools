@@ -1,22 +1,16 @@
 <?php
 
-namespace Bstools;
+namespace Bstools\Renderer;
 
-class Table
+class Table implements RendererInterface
 {
-    protected $data;
-    public function __construct($data)
-    {
-        $this->data = $data;
-    }
-
-    public function render()
+    public function render(array $statsData)
     {
         $columns = array();
         $columnWidths = array();
         $output = "";
 
-        foreach ($this->data as $data) {
+        foreach ($statsData as $data) {
             foreach ($data as $key => $val) {
                 $columns[] = $key;
             }
@@ -24,13 +18,13 @@ class Table
         $columns = array_unique($columns);
         sort($columns);
 
-        $rows = array_keys($this->data);
+        $rows = array_keys($statsData);
 
         $columnWidths["rows"] = $this->getMaxLength($rows);
         foreach ($columns as $column) {
             $tempValues = array();
             $tempValues[] = $column;
-            foreach ($this->data as $tube => $data) {
+            foreach ($statsData as $tube => $data) {
                 $tempValues[] = $data[$column];
             }
             $columnWidths[$column] = $this->getMaxLength($tempValues);
@@ -50,7 +44,7 @@ class Table
         $output .= $dividerLine;
 
         //output rows
-        foreach ($this->data as $tube => $data) {
+        foreach ($statsData as $tube => $data) {
             $output .= "| ";
             $output .= str_pad($tube, $columnWidths["rows"], ' ', STR_PAD_LEFT);
             $output .= " | ";
